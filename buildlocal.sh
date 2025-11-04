@@ -50,12 +50,12 @@ rm -rf $CURDIR/build/
 cd $CURDIR
 
 echo "==============================================="
-echo $NAMEALL |  egrep "Ubuntu"
+echo $NAMEALL |  egrep "Ubuntu|Debian"
 
-#Check if it is an Ubuntu system
+#Check if it is an Ubuntu/Debian system
 if [ $? -eq 0 ]; then
 
-echo "This is an Ubuntu system"
+echo "This is an Ubuntu/Debian system"
      pkg_type="snap"
      build_string="Snap_Build"
      cur_date=`date +%Y%m%d`
@@ -64,26 +64,26 @@ echo "This is an Ubuntu system"
 
      mkdir -p $CURDIR/build
 
- for rpmname in xCAT-client xCAT-genesis-scripts perl-xCAT xCAT-server xCAT xCATsn xCAT-test xCAT-vlan; do
-     rpmname_low=`echo $rpmname | tr '[A-Z]' '[a-z]'`
-     echo "============================================"
-     echo "$rpmname_low"
-     cd $rpmname
-     dch -v $pkg_version -b -c debian/changelog $build_string
-     dpkg-buildpackage -uc -us
-     rc=$?
-     if [ $rc -gt 0 ]; then
-                  echo "Error: $rpmname build package failed exit code $rc"
-     fi
-     cd -
-     mv ${rpmname_low}* $CURDIR/build
+     for pkgname in xCAT-client xCAT-genesis-scripts perl-xCAT xCAT-server xCAT xCATsn xCAT-test xCAT-vlan; do
+         pkgname_low=`echo $pkgname | tr '[A-Z]' '[a-z]'`
+         echo "============================================"
+         echo "$pkgname_low"
+         cd $pkgname
+         dch -v $pkg_version -b -c debian/changelog $build_string
+         dpkg-buildpackage -uc -us
+         rc=$?
+         if [ $rc -gt 0 ]; then
+            echo "Error: $pkgname build package failed exit code $rc"
+         fi
+         cd -
+         mv ${pkgname_low}* $CURDIR/build
 
- done
+     done
      #delete all files except  .deb file
      find $CURDIR/build/* ! -name *.deb | xargs rm -f
 
 else
-#This is not an Ubuntu system
+#This is not an Ubuntu/Debian system
 echo "This is an $OSNAME system"
 
      if [ "$OS" = "SUSE" ]; then
