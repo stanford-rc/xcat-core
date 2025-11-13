@@ -867,23 +867,43 @@ sub settunables
     }
 
     # set for after reboot
-    if (!(-f "/etc/sysctl.conf.xcatbackup")) {    # not already backed up
-        $cmd = "cp /etc/sysctl.conf /etc/sysctl.conf.xcatbackup";
+    my $sysctl_file;
+    if (-d "/etc/sysctl.d") {
+        $sysctl_file = "/etc/sysctl.d/99-xcat.conf";
+        if (!(-f "$sysctl_file")) {
+            $cmd = "touch $sysctl_file";
+            my $outref = xCAT::Utils->runcmd("$cmd", 0);
+            if ($::RUNCMD_RC != 0)
+            {
+                xCAT::MsgUtils->message('E', "Could not create $sysctl_file.");
+                exit 1;
+            }
+        }
+    } elsif (-f "/etc/sysctl.conf") {
+        $sysctl_file = "/etc/sysctl.conf";
+    } else {
+        xCAT::MsgUtils->message('E', "Could not find /etc/sysctl.d directory or /etc/sysctl.conf.");
+        exit 1;
+    }
+
+    my $sysctl_backup = "$sysctl_file.xcatbackup";
+    if (!(-f "$sysctl_backup")) {
+        $cmd = "cp $sysctl_file $sysctl_backup";
         my $outref = xCAT::Utils->runcmd("$cmd", 0);
         if ($::RUNCMD_RC != 0)
         {
-            xCAT::MsgUtils->message('E', "Could not backup /etc/sysctl.conf.");
+            xCAT::MsgUtils->message('E', "Could not backup $sysctl_file.");
             exit 1;
         }
     }
 
     #delete all occurance of the attribute and then add xCAT settings
-    `sed -i '/net.ipv4.neigh.default.gc_thresh1 /'d /etc/sysctl.conf`;
-    `echo "net.ipv4.neigh.default.gc_thresh1 = 1024" >>/etc/sysctl.conf`;
-    `sed -i '/net.ipv4.neigh.default.gc_thresh2 /'d /etc/sysctl.conf`;
-    `echo "net.ipv4.neigh.default.gc_thresh2 = 4096" >>/etc/sysctl.conf`;
-    `sed -i '/net.ipv4.neigh.default.gc_thresh3 /'d /etc/sysctl.conf`;
-    `echo "net.ipv4.neigh.default.gc_thresh3 = 8192" >>/etc/sysctl.conf`;
+    `sed -i '/net.ipv4.neigh.default.gc_thresh1 /'d $sysctl_file`;
+    `echo "net.ipv4.neigh.default.gc_thresh1 = 1024" >>$sysctl_file`;
+    `sed -i '/net.ipv4.neigh.default.gc_thresh2 /'d $sysctl_file`;
+    `echo "net.ipv4.neigh.default.gc_thresh2 = 4096" >>$sysctl_file`;
+    `sed -i '/net.ipv4.neigh.default.gc_thresh3 /'d $sysctl_file`;
+    `echo "net.ipv4.neigh.default.gc_thresh3 = 8192" >>$sysctl_file`;
 
 }
 
