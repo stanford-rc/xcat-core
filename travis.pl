@@ -278,7 +278,7 @@ sub send_back_comment{
 sub build_xcat_core{
     my @output;
     #my @cmds = ("gpg --list-keys",
-    #            "sed -i '/SignWith: /d' $ENV{'PWD'}/build-ubunturepo");
+    #            "sed -i '/SignWith: /d' $ENV{'PWD'}/build-debrepo");
     #foreach my $cmd (@cmds){
     #    print "[build_xcat_core] running $cmd\n";
     #    @output = runcmd("$cmd");
@@ -289,7 +289,7 @@ sub build_xcat_core{
     #    }
     #}
 
-    my $cmd = "sudo ./build-ubunturepo -c UP=0 BUILDALL=1 GPGSIGN=0";
+    my $cmd = "sudo ./build-debrepo -c UP=0 BUILDALL=1 GPGSIGN=0";
     @output = runcmd("$cmd");
     print ">>>>>Dumper the output of '$cmd'\n";
     print Dumper \@output;

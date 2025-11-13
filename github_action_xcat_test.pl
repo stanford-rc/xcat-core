@@ -279,7 +279,7 @@ sub send_back_comment{
 sub build_xcat_core{
     my @output;
 
-    my $cmd = "sudo ./build-ubunturepo -c UP=0 BUILDALL=1 GPGSIGN=0";
+    my $cmd = "sudo ./build-debrepo -c UP=0 BUILDALL=1 GPGSIGN=0";
     @output = runcmd("$cmd");
     if($::RUNCMD_RC){
         my $lastline = $output[-1];
