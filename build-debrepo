@@ -107,7 +107,8 @@ for package in ${packages[@]}; do
 done
 
 # Supported distributions
-dists="saucy trusty utopic xenial bionic focal jammy"
+# Ubuntu LTS releases and Debian stable/testing releases
+dists="focal jammy noble bullseye bookworm trixie"
 
 c_flag=            # xcat-core (trunk-delvel) path
 d_flag=            # xcat-dep (trunk) path
@@ -356,12 +357,8 @@ then
     mkdir conf
 
     for dist in $dists; do
-        # for all releases moving forward, support amd64 and ppc64el
+        # All modern releases support both amd64 and ppc64el
         tmp_out_arch="amd64 ppc64el"
-        if [ "$dist" = "saucy" ]; then
-            # for older releases of Ubuntu that does not support ppc64el
-            tmp_out_arch="amd64"
-        fi
         cat << __EOF__ >> conf/distributions
 Origin: xCAT internal repository
 Label: xcat-core bazaar repository
@@ -388,15 +385,9 @@ basedir .
 __EOF__
 
     #import the deb packages into the repo
-    amd_files=`ls ../$package_dir_name/*.deb | grep -v "ppc64el"`
     all_files=`ls ../$package_dir_name/*.deb`
     for dist in $dists; do
-        deb_files=$all_files
-        if [ "$dist" = "saucy" ]; then
-            # for older releases of Ubuntu that does not support ppc64el
-            deb_files=$amd_files
-        fi
-        for file in $deb_files; do
+        for file in $all_files; do
             reprepro -b ./ includedeb $dist $file;
         done
     done
@@ -501,11 +492,8 @@ then
 
     #create the conf/distributions file
     for dist in $dists; do
+        # All modern releases support both amd64 and ppc64el
         tmp_out_arch="amd64 ppc64el"
-        if [ "$dist" = "saucy" ]; then
-            # for older releases of Ubuntu that does not support ppc64el
-            tmp_out_arch="amd64"
-        fi
         cat << __EOF__ >> conf/distributions
 Origin: xCAT internal repository
 Label: xcat-dep bazaar repository
@@ -535,15 +523,9 @@ basedir .
 __EOF__
 
     #import the deb packages into the repo
-    amd_files=`ls ../debs/*.deb | grep -v "ppc64el"`
     all_files=`ls ../debs/*.deb`
     for dist in $dists; do
-        deb_files=$all_files
-        if [ "$dist" = "saucy" ]; then
-            # for older releases of Ubuntu that does not support ppc64el
-            deb_files=$amd_files
-        fi
-        for file in $deb_files; do
+        for file in $all_files; do
             reprepro -b ./ includedeb $dist $file;
         done
     done
