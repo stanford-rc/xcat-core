@@ -56,8 +56,6 @@ else
     exit 1
 fi
 
-export HOME=/root
-
 
 # Process cmd line variable assignments, assigning each attr=val pair to a variable of same name
 for i in $*; do
@@ -417,7 +415,11 @@ if [ "$host_arch" != "ppc64le" ];then
 else
     host_arch="ppc64el"
 fi
-echo deb [arch=$host_arch] file://"`pwd`" $DISTRIB_CODENAME main > /etc/apt/sources.list.d/xcat-core.list
+cat > xcat-core.list << EOF
+deb [arch=$host_arch] file://"`pwd`" $DISTRIB_CODENAME main
+EOF
+echo "Repository list file created: xcat-core.list"
+echo "To install, run: sudo cp xcat-core.list /etc/apt/sources.list.d/"
 __EOF__
 
     chmod 775 mklocalrepo.sh
@@ -436,18 +438,11 @@ __EOF__
     #create the xcat-core.list file
 
     cd ../
-    if ! grep xcat /etc/group ; then
-        groupadd xcat
-    fi
-
-    chgrp -R root xcat-core
-    chmod -R g+w xcat-core
+    # Group management removed - not needed for building packages
 
     #build the tar ball
     echo "Creating `pwd`/$tar_name ..."
     tar -hjcf $tar_name xcat-core
-    chgrp root $tar_name
-    chmod g+w $tar_name
 
     if [ -n "$DEST" ]; then
         ln -sf $(basename `pwd`)/$tar_name ../$tar_name
@@ -567,24 +562,21 @@ if [ "$host_arch" != "ppc64le" ];then
 else
     host_arch="ppc64el"
 fi
-echo deb [arch=$host_arch] file://"`pwd`" $DISTRIB_CODENAME main > /etc/apt/sources.list.d/xcat-dep.list
+cat > xcat-dep.list << EOF
+deb [arch=$host_arch] file://"`pwd`" $DISTRIB_CODENAME main
+EOF
+echo "Repository list file created: xcat-dep.list"
+echo "To install, run: sudo cp xcat-dep.list /etc/apt/sources.list.d/"
 __EOF__
 
     chmod 775 mklocalrepo.sh
 
     cd ..
-    if ! grep xcat /etc/group ; then
-        groupadd xcat
-    fi
-
-    chgrp -R root xcat-dep
-    chmod -R g+w xcat-dep
+    # Group management removed - not needed for building packages
 
     #create the tar ball
     dep_tar_name=xcat-dep-ubuntu-`date +%Y%m%d%H%M`.tar.bz2
     tar -hjcf $dep_tar_name xcat-dep
-    chgrp root $dep_tar_name
-    chmod g+w $dep_tar_name
 
 
     USER="xcat"
