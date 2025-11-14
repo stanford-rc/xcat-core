@@ -402,13 +402,16 @@ elif [[ -f /etc/os-release ]]; then
 fi
 cd `dirname $0`
 host_arch=`uname -m`
-if [ "$host_arch" != "ppc64le" ];then
-    host_arch="amd64"
-else
-    host_arch="ppc64el"
-fi
+[ "$host_arch" != "ppc64el" -a "$host_arch" != "arm64" ] && host_arch="amd64"
 cat > xcat-core.list << EOF
-deb [arch=$host_arch] file://"`pwd`" $DISTRIB_CODENAME main
+# xCAT Core Repository
+# To install, run: sudo cp xcat-core.list /etc/apt/sources.list.d/
+Types: deb
+URIs: file://`pwd`
+Suites: $DISTRIB_CODENAME
+Components: main
+Architectures: $host_arch
+Trusted: yes
 EOF
 echo "Repository list file created: xcat-core.list"
 echo "To install, run: sudo cp xcat-core.list /etc/apt/sources.list.d/"
@@ -540,13 +543,16 @@ elif [[ -f /etc/os-release ]]; then
 fi
 cd `dirname $0`
 host_arch=`uname -m`
-if [ "$host_arch" != "ppc64le" ];then
-    host_arch="amd64"
-else
-    host_arch="ppc64el"
-fi
+[ "$host_arch" != "ppc64el" -a "$host_arch" != "arm64" ] && host_arch="amd64"
 cat > xcat-dep.list << EOF
-deb [arch=$host_arch] file://"`pwd`" $DISTRIB_CODENAME main
+# xCAT Dependency Repository
+# To install, run: sudo cp xcat-dep.list /etc/apt/sources.list.d/
+Types: deb
+URIs: file://`pwd`
+Suites: $DISTRIB_CODENAME
+Components: main
+Architectures: $host_arch
+Trusted: yes
 EOF
 echo "Repository list file created: xcat-dep.list"
 echo "To install, run: sudo cp xcat-dep.list /etc/apt/sources.list.d/"
