@@ -43,6 +43,7 @@ binary-arch:
 	chmod 755 `pwd`/debian/xcat-probe/opt/xcat/bin/*
 	chmod 755 `pwd`/debian/xcat-probe/opt/xcat/probe/subcmds/*
 	chmod 644 `pwd`/debian/xcat-probe/opt/xcat/probe/lib/perl/*
+	chmod 755 `pwd`/debian/xcat-probe/opt/xcat/probe/lib/perl/xCAT
 	chmod 644 `pwd`/debian/xcat-probe/opt/xcat/probe/lib/perl/xCAT/*
 #	dh_installmenu
 #	dh_installdebconf	
