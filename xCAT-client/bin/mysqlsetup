@@ -1071,24 +1071,24 @@ sub mysqlreboot
         if ($::MariaDB == 1) {    # MariaDB not MySQL
 
             if ($::linuxos =~ /rh.*|ol.*|rocky.*|alma.*|sles15.*/) {
-                $cmd = "chkconfig mariadb on";
+                $cmd = "systemctl enable mariadb";
             } else {              #sles
-                $cmd = "chkconfig mysql on";
+                $cmd = "systemctl enable mysql";
                 if ($::debianflag) {
-                    $cmd = "update-rc.d mysql defaults";
+                    $cmd = "systemctl enable mysql";
                 }
 
             }
         } else {    # mysql
             if ($::linuxos =~ /rh.*|ol.*|rocky.*|alma.*/)
             {
-                $cmd = "chkconfig mysqld on";
+                $cmd = "systemctl enable mysqld";
             }
             else
             {       # sles
-                $cmd = "chkconfig mysql on";
+                $cmd = "systemctl enable mysql";
                 if ($::debianflag) {
-                    $cmd = "update-rc.d mysql defaults";
+                    $cmd = "systemctl enable mysql";
                 }
             }
         }
