@@ -3,7 +3,7 @@ package xCAT::Scope;
 use xCAT::Utils;
 use xCAT::Table;
 use xCAT::TableUtils;
-use xCAT::ServiceNodeUtils qw(getSNList);
+use xCAT::ServiceNodeUtils;
 
 
 #-----------------------------------------------------------------------------

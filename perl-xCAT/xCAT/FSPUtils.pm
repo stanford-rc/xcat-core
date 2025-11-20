@@ -27,7 +27,7 @@ require xCAT::TableUtils;
 
 #use  Data::Dumper;
 require xCAT::NodeRange;
-use xCAT::MsgUtils qw(verbose_message);
+use xCAT::MsgUtils;
 
 
 #-------------------------------------------------------------------------------

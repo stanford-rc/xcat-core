@@ -14,7 +14,7 @@ use File::Find;
 use Cwd;
 use File::Temp;
 use xCAT::Utils qw(genpassword);
-use xCAT::TableUtils qw(get_site_attribute);
+use xCAT::TableUtils;
 use xCAT::SvrUtils;
 use xCAT::PasswordUtils;
 use Data::Dumper;

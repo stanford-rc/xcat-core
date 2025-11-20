@@ -63,7 +63,7 @@ use File::Path;
 use Time::HiRes qw(sleep time);
 use Thread qw(yield);
 use Fcntl qw/:DEFAULT :flock/;
-use xCAT::Client qw(submit_request);
+use xCAT::Client;
 my $clientselect  = new IO::Select;
 my $sslclients    = 0;                # THROTTLE
 my $maxsslclients = 64;               # default
